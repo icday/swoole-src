@@ -280,7 +280,7 @@ void php_swoole_server_before_start(swServer *serv, zval *zobject TSRMLS_DC)
         return;
     }
 
-    swTrace("Create swoole_server host=%s, port=%d, mode=%d, type=%d", serv_host, (int) serv_port, serv->factory_mode, (int) sock_type);
+    /*swTrace("Create swoole_server host=%s, port=%d, mode=%d, type=%d", serv_host, (int) serv_port, serv->factory_mode, (int) sock_type);*/
 
     /**
      * Master Process ID
@@ -1520,7 +1520,7 @@ PHP_METHOD(swoole_server, set)
     if (sw_zend_hash_find(vht, ZEND_STRS("cpu_affinity_ignore"), (void **) &v) == SUCCESS)
     {
         int ignore_num = zend_hash_num_elements(Z_ARRVAL_P(v));
-        if (ignore_num >= SW_CPU_NUM) 
+        if (ignore_num >= SW_CPU_NUM)
         {
             swoole_php_fatal_error(E_ERROR, "cpu_affinity_ignore num must be less than cpu num (%d)", SW_CPU_NUM);
             RETURN_FALSE;

@@ -1,0 +1,3 @@
+[submodule "swoole-amqp"]
+	path = swoole-amqp
+	url = git@github.com:icday/swoole-amqp.git

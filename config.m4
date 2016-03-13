@@ -29,6 +29,9 @@ PHP_ARG_ENABLE(async_mysql, enable async_mysql support,
 PHP_ARG_ENABLE(async_redis, enable async_redis support,
 [  --enable-async-redis    Do you have hiredis?], no, no)
 
+PHP_ARG_ENABLE(async_amqp, enable async_amqp support,
+[  --enable-async-amqp    Do you have amqp?], no, no)
+
 PHP_ARG_ENABLE(async_httpclient, enable async_httpclient support,
 [  --enable-async-httpclient  Enable async httpclient support?], no, no)
 
@@ -201,6 +204,7 @@ if test "$PHP_SWOOLE" != "no"; then
     AC_CHECK_LIB(ssl, SSL_library_init, AC_DEFINE(HAVE_OPENSSL, 1, [have openssl]))
     AC_CHECK_LIB(pcre, pcre_compile, AC_DEFINE(HAVE_PCRE, 1, [have pcre]))
     AC_CHECK_LIB(hiredis, redisConnect, AC_DEFINE(HAVE_HIREDIS, 1, [have hiredis]))
+    AC_CHECK_LIB(rabbitmq, amqp_new_connection, AC_DEFINE(HAVE_RABBITMQ_C, 1, [have rabbitmqc]))
     AC_CHECK_LIB(nghttp2, nghttp2_hd_inflate_new, AC_DEFINE(HAVE_NGHTTP2, 1, [have nghttp2]))
 
     AC_CHECK_LIB(z, gzgets, [
@@ -248,6 +252,11 @@ if test "$PHP_SWOOLE" != "no"; then
     	PHP_ADD_LIBRARY(tcmalloc, 1, SWOOLE_SHARED_LIBADD)
     fi
 
+    if test "$PHP_ASYNC_AMQP" = "yes"; then
+        AC_DEFINE(SW_USE_AMQP, 1, [enable async-amqp support])
+        PHP_ADD_LIBRARY(rabbitmq, 1, SWOOLE_SHARED_LIBADD)
+    fi
+
     swoole_source_file="swoole.c \
         swoole_server.c \
         swoole_server_port.c \
@@ -266,6 +275,7 @@ if test "$PHP_SWOOLE" != "no"; then
         swoole_http_client.c \
         swoole_mysql.c \
         swoole_redis.c \
+        swoole-amqp/swoole_amqp.c \
         src/core/base.c \
         src/core/log.c \
         src/core/hashmap.c \
