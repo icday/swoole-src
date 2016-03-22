@@ -32,6 +32,9 @@ PHP_ARG_ENABLE(async_redis, enable async_redis support,
 PHP_ARG_ENABLE(async_amqp, enable async_amqp support,
 [  --enable-async-amqp    Do you have amqp?], no, no)
 
+PHP_ARG_ENABLE(async_memcached, enable async_memcached support,
+[  --enable-async-memcached  Enable async memcached support], no, no)
+
 PHP_ARG_ENABLE(async_httpclient, enable async_httpclient support,
 [  --enable-async-httpclient  Enable async httpclient support?], no, no)
 
@@ -252,11 +255,6 @@ if test "$PHP_SWOOLE" != "no"; then
     	PHP_ADD_LIBRARY(tcmalloc, 1, SWOOLE_SHARED_LIBADD)
     fi
 
-    if test "$PHP_ASYNC_AMQP" = "yes"; then
-        AC_DEFINE(SW_USE_AMQP, 1, [enable async-amqp support])
-        PHP_ADD_LIBRARY(rabbitmq, 1, SWOOLE_SHARED_LIBADD)
-    fi
-
     swoole_source_file="swoole.c \
         swoole_server.c \
         swoole_server_port.c \
@@ -275,7 +273,6 @@ if test "$PHP_SWOOLE" != "no"; then
         swoole_http_client.c \
         swoole_mysql.c \
         swoole_redis.c \
-        swoole-amqp/swoole_amqp.c \
         src/core/base.c \
         src/core/log.c \
         src/core/hashmap.c \
@@ -338,6 +335,17 @@ if test "$PHP_SWOOLE" != "no"; then
 
     swoole_source_file="$swoole_source_file thirdparty/php_http_parser.c"
     swoole_source_file="$swoole_source_file thirdparty/multipart_parser.c"
+
+    if test "$PHP_ASYNC_AMQP" = "yes"; then
+        swoole_source_file="$swoole_source_file swoole-amqp/swoole_amqp.c"
+        AC_DEFINE(SW_USE_AMQP, 1, [enable async-amqp support])
+        PHP_ADD_LIBRARY(rabbitmq, 1, SWOOLE_SHARED_LIBADD)
+    fi
+
+    if test "$PHP_ASYNC_MEMCACHED" = "yes"; then
+        swoole_source_file="$swoole_source_file swoole-memcached/swoole_memcached.c"
+        AC_DEFINE(SW_USE_MEMCACHED, 1, [enable async-memcached support])
+    fi
 
     PHP_NEW_EXTENSION(swoole, $swoole_source_file, $ext_shared)
 

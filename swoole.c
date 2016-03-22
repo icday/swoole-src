@@ -598,6 +598,9 @@ PHP_MINIT_FUNCTION(swoole)
 #ifdef SW_USE_AMQP
     swoole_amqp_init(module_number TSRMLS_CC);
 #endif
+#ifdef SW_USE_MEMCACHED
+    swoole_memcached_init(module_number TSRMLS_CC);
+#endif
     swoole_async_init(module_number TSRMLS_CC);
     swoole_process_init(module_number TSRMLS_CC);
     swoole_table_init(module_number TSRMLS_CC);

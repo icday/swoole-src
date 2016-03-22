@@ -1,3 +1,6 @@
 [submodule "swoole-amqp"]
 	path = swoole-amqp
 	url = git@github.com:icday/swoole-amqp.git
+[submodule "swoole-memcached"]
+	path = swoole-memcached
+	url = git@github.com:icday/swoole-memcached.git

@@ -203,6 +203,7 @@ enum php_swoole_fd_type
     PHP_SWOOLE_FD_REDIS,
     PHP_SWOOLE_FD_HTTPCLIENT,
     PHP_SWOOLE_FD_AMQP,
+    PHP_SWOOLE_FD_MEMCACHED,
 };
 //---------------------------------------------------------
 #define php_swoole_socktype(type)           (type & (~SW_FLAG_SYNC) & (~SW_FLAG_ASYNC) & (~SW_FLAG_KEEP) & (~SW_SOCK_SSL))
@@ -349,6 +350,9 @@ void swoole_redis_init(int module_number TSRMLS_DC);
 #endif
 #ifdef SW_USE_AMQP
 void swoole_amqp_init(int module_number TSRMLS_DC);
+#endif
+#ifdef SW_USE_MEMCACHED
+void swoole_memcached_init(int module_number TSRMLS_DC);
 #endif
 void swoole_process_init(int module_number TSRMLS_DC);
 void swoole_http_server_init(int module_number TSRMLS_DC);
